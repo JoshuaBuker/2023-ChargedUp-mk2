@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.Drive.DefaultDriveCommand;
 import frc.robot.subsystems.ArmExtentionSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -35,7 +36,7 @@ public class RobotContainer {
   private final ArmExtentionSubsystem armExtention = new ArmExtentionSubsystem();
 
 
-  private final ThrustMaster driveJoy = new ThrustMaster(Constants.DRIVE_CONTROLLER_ID);
+  private final ThrustMaster driveJoy = new ThrustMaster(ControllerConstants.DRIVE_CONTROLLER_ID);
 
   public RobotContainer() {
       vision.register();

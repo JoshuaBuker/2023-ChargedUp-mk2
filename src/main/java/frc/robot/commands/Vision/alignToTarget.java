@@ -41,13 +41,13 @@ public class alignToTarget extends CommandBase {
   @Override
   public void initialize() {
     pidForward.setPID(0.05, 0, 0);
-    pidForward.setTolerance(target.getAlignmentTolerance(), DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND);
+    pidForward.setTolerance(target.getAlignmentTolerance());
 
     pidStrafe.setPID(0.05, 0, 0);
-    pidStrafe.setTolerance(target.getAlignmentTolerance(), DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND);
+    pidStrafe.setTolerance(target.getAlignmentTolerance());
 
     pidRotate.setPID(0.05, 0, 0);
-    pidRotate.setTolerance(target.getAlignmentTolerance(), DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
+    pidRotate.setTolerance(target.getAlignmentTolerance());
 
     
       switch (target.getName()) {

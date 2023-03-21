@@ -5,10 +5,11 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import frc.robot.Constants.SuperstructureConstants;
 
 public class Superstructure {
-    private final PneumaticHub pneumatics = new PneumaticHub(Constants.PNEUMATICS_HUB_ID);
-    private final  PowerDistribution pdp = new PowerDistribution(Constants.POWER_DISTRIBUTION_ID, ModuleType.kRev);
+    private final PneumaticHub pneumatics = new PneumaticHub(SuperstructureConstants.PNEUMATICS_HUB_ID);
+    private final  PowerDistribution pdp = new PowerDistribution(SuperstructureConstants.POWER_DISTRIBUTION_ID, ModuleType.kRev);
 
     private UsbCamera cam;
 

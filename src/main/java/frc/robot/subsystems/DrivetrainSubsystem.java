@@ -18,13 +18,13 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     private static final double MAX_VOLTAGE = 12.0;
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 4.14528;
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = (MAX_VELOCITY_METERS_PER_SECOND /
-            Math.hypot(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0)) * 0.5;
+            Math.hypot(SwerveConstants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, SwerveConstants.DRIVETRAIN_WHEELBASE_METERS / 2.0)) * 0.5;
 
     private final SwerveModule frontLeftModule;
     private final SwerveModule frontRightModule;
@@ -36,10 +36,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final AHRS gyroscope = Common.NavX.getNavX();
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-            new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
-            new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
-            new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
-            new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0)
+            new Translation2d(SwerveConstants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, SwerveConstants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
+            new Translation2d(SwerveConstants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -SwerveConstants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
+            new Translation2d(-SwerveConstants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, SwerveConstants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
+            new Translation2d(-SwerveConstants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -SwerveConstants.DRIVETRAIN_WHEELBASE_METERS / 2.0)
     );
     private final SwerveDriveOdometry odometry;
 
@@ -53,10 +53,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         .withSize(2, 4)
                         .withPosition(0, 0))
                 .withGearRatio(SdsModuleConfigurations.MK4I_L3)
-                .withDriveMotor(MotorType.NEO, Constants.FrontLeft.DRIVE_MOTOR)
-                .withSteerMotor(MotorType.NEO, Constants.FrontLeft.STEER_MOTOR)
-                .withSteerEncoderPort(Constants.FrontLeft.STEER_ENCODER)
-                .withSteerOffset(Constants.FrontLeft.STEER_MOTOR)
+                .withDriveMotor(MotorType.NEO, SwerveConstants.FrontLeft.DRIVE_MOTOR)
+                .withSteerMotor(MotorType.NEO, SwerveConstants.FrontLeft.STEER_MOTOR)
+                .withSteerEncoderPort(SwerveConstants.FrontLeft.STEER_ENCODER)
+                .withSteerOffset(SwerveConstants.FrontLeft.STEER_MOTOR)
                 .build();
 
         frontRightModule = new MkSwerveModuleBuilder()
@@ -64,10 +64,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         .withSize(2, 4)
                         .withPosition(2, 0))
                 .withGearRatio(SdsModuleConfigurations.MK4I_L3)
-                .withDriveMotor(MotorType.NEO, Constants.FrontRight.DRIVE_MOTOR)
-                .withSteerMotor(MotorType.NEO, Constants.FrontRight.STEER_MOTOR)
-                .withSteerEncoderPort(Constants.FrontRight.STEER_ENCODER)
-                .withSteerOffset(Constants.FrontRight.STEER_OFFSET)
+                .withDriveMotor(MotorType.NEO, SwerveConstants.FrontRight.DRIVE_MOTOR)
+                .withSteerMotor(MotorType.NEO, SwerveConstants.FrontRight.STEER_MOTOR)
+                .withSteerEncoderPort(SwerveConstants.FrontRight.STEER_ENCODER)
+                .withSteerOffset(SwerveConstants.FrontRight.STEER_OFFSET)
                 .build();
 
         backLeftModule = new MkSwerveModuleBuilder()
@@ -75,10 +75,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         .withSize(2, 4)
                         .withPosition(4, 0))
                 .withGearRatio(SdsModuleConfigurations.MK4I_L3)
-                .withDriveMotor(MotorType.NEO, Constants.BackLeft.DRIVE_MOTOR)
-                .withSteerMotor(MotorType.NEO, Constants.BackLeft.STEER_MOTOR)
-                .withSteerEncoderPort(Constants.BackLeft.STEER_ENCODER)
-                .withSteerOffset(Constants.BackLeft.STEER_OFFSET)
+                .withDriveMotor(MotorType.NEO, SwerveConstants.BackLeft.DRIVE_MOTOR)
+                .withSteerMotor(MotorType.NEO, SwerveConstants.BackLeft.STEER_MOTOR)
+                .withSteerEncoderPort(SwerveConstants.BackLeft.STEER_ENCODER)
+                .withSteerOffset(SwerveConstants.BackLeft.STEER_OFFSET)
                 .build();
 
         backRightModule = new MkSwerveModuleBuilder()
@@ -86,10 +86,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         .withSize(2, 4)
                         .withPosition(6, 0))
                 .withGearRatio(SdsModuleConfigurations.MK4I_L3)
-                .withDriveMotor(MotorType.NEO, Constants.BackRight.DRIVE_MOTOR)
-                .withSteerMotor(MotorType.NEO, Constants.BackRight.STEER_MOTOR)
-                .withSteerEncoderPort(Constants.BackRight.STEER_ENCODER)
-                .withSteerOffset(Constants.BackRight.STEER_OFFSET)
+                .withDriveMotor(MotorType.NEO, SwerveConstants.BackRight.DRIVE_MOTOR)
+                .withSteerMotor(MotorType.NEO, SwerveConstants.BackRight.STEER_MOTOR)
+                .withSteerEncoderPort(SwerveConstants.BackRight.STEER_ENCODER)
+                .withSteerOffset(SwerveConstants.BackRight.STEER_OFFSET)
                 .build();
 
         odometry = new SwerveDriveOdometry(
