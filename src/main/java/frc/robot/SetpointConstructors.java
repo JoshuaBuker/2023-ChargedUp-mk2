@@ -1,7 +1,7 @@
 package frc.robot;
 
 /** This is a collection of all setpoints for each subsystem */
-public class Setpoints {
+public class SetpointConstructors {
 
     public static class ShoulderSetpoint {
 

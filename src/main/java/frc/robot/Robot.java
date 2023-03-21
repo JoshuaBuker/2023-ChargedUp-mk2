@@ -17,7 +17,7 @@ public class Robot extends TimedRobot {
   public static SendableChooser<Command> sendablechooser = new SendableChooser<Command>();
   private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
+  public RobotContainer m_robotContainer;
 
   @Override
   public void robotInit() {
@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_robotContainer.getDrivetrain().resetToAbsolute();
+    RobotContainer.getDrivetrain().resetToAbsolute();
 
     m_autonomousCommand = sendablechooser.getSelected();
 
@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.getDrivetrain().resetToAbsolute();
+    RobotContainer.getDrivetrain().resetToAbsolute();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

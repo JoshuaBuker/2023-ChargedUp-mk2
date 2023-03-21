@@ -4,9 +4,8 @@ import Common.Limelight;
 import Common.LimelightPipeline;
 import Common.Target;
 import Common.Target.DetectionType;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class VisionSubsystem extends SubsystemBase {
+public class VisionContainer {
 
 
 //====================== Pipelines ==================================
@@ -40,10 +39,7 @@ public static class Targets {
 public static void setPipeline(Limelight limelight, LimelightPipeline pipeline) {
   limelight.setPipeline(pipeline);
 }
-  public VisionSubsystem() {}
-  @Override
-
-  public void periodic() {}
+  public VisionContainer() {}
 
  
 }

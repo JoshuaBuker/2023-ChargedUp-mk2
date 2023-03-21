@@ -12,13 +12,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.VisionSubsystem.Pipelines;
+import frc.robot.subsystems.VisionContainer;
+import frc.robot.subsystems.VisionContainer.Pipelines;
 
 public class alignToTarget extends CommandBase {
 
   DrivetrainSubsystem drivetrain;
-  VisionSubsystem vision;
+  VisionContainer vision;
   Limelight limelight;
   Target target;
 
@@ -28,14 +28,14 @@ public class alignToTarget extends CommandBase {
 
   DoubleSupplier strafeAxis;
 
-  public alignToTarget(DrivetrainSubsystem drivetrain, VisionSubsystem vision, Limelight limelight, Target target, DoubleSupplier strafeAxis) {
+  public alignToTarget(DrivetrainSubsystem drivetrain, VisionContainer vision, Limelight limelight, Target target, DoubleSupplier strafeAxis) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
     this.vision = vision;
     this.target = target;
     this.strafeAxis = strafeAxis;
 
-    addRequirements(drivetrain, vision);
+    addRequirements(drivetrain);
   }
 
   @Override
@@ -52,16 +52,16 @@ public class alignToTarget extends CommandBase {
     
       switch (target.getName()) {
         // Reflective
-        case "gridTapeLower": VisionSubsystem.setPipeline(limelight, Pipelines.reflectiveLowerPipeline); break;
-        case "gridTapeUpper": VisionSubsystem.setPipeline(limelight, Pipelines.reflectiveUpperPipeline); break;
+        case "gridTapeLower": VisionContainer.setPipeline(limelight, Pipelines.reflectiveLowerPipeline); break;
+        case "gridTapeUpper": VisionContainer.setPipeline(limelight, Pipelines.reflectiveUpperPipeline); break;
         // AprilTags
-        case "gridTag": VisionSubsystem.setPipeline(limelight, Pipelines.apriltagPipeline); break;
-        case "substationTag": VisionSubsystem.setPipeline(limelight, Pipelines.apriltagPipeline); break;
+        case "gridTag": VisionContainer.setPipeline(limelight, Pipelines.apriltagPipeline); break;
+        case "substationTag": VisionContainer.setPipeline(limelight, Pipelines.apriltagPipeline); break;
         // Game Pieces
-        case "cone": VisionSubsystem.setPipeline(limelight, Pipelines.conePipeline);
-        case "cube": VisionSubsystem.setPipeline(limelight, Pipelines.cubePipeline);
+        case "cone": VisionContainer.setPipeline(limelight, Pipelines.conePipeline);
+        case "cube": VisionContainer.setPipeline(limelight, Pipelines.cubePipeline);
         // Default
-        default: VisionSubsystem.setPipeline(limelight, Pipelines.defaultPipeline); break;
+        default: VisionContainer.setPipeline(limelight, Pipelines.defaultPipeline); break;
 
       }
   }

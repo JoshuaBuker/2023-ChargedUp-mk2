@@ -3,16 +3,18 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import Common.ArcadeControls;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ShoulderConstants;
-import frc.robot.Setpoints.ShoulderSetpoint;
+import frc.robot.SetpointConstructors.ShoulderSetpoint;
 
 public class ShoulderSubsystem extends SubsystemBase {
 
-
+  @SuppressWarnings("unused")
   public static class ShoulderSetpoints {
     private static ShoulderSetpoint home = new ShoulderSetpoint(5);
     private static ShoulderSetpoint forward = new ShoulderSetpoint(50);
@@ -23,43 +25,52 @@ public class ShoulderSubsystem extends SubsystemBase {
   private MotorControllerGroup shoulderMotors = new MotorControllerGroup(leftMotor, rightMotor);
   private DutyCycleEncoder encoder = new DutyCycleEncoder(ShoulderConstants.SHOULDER_ENCODER);
   private PIDController pid = new PIDController(0.02, 0.0, 0.0);
+  private ArcadeControls arcadeControls = RobotContainer.getArcadeControls();
 
-  private boolean enabled;
-  private ShoulderSetpoint setpoint;
+  private boolean autoEnabled;
+  private ShoulderSetpoint autoSetpoint;
+  private double currentAngle;
 
   
 
   public ShoulderSubsystem() {
+    setAutoSetpoint(ShoulderSetpoints.home);
+
     pid.setTolerance(ShoulderConstants.ANGLE_TOLERANCE);
     leftMotor.setInverted(false);
     rightMotor.setInverted(true);
-    enabled = false;
+    autoEnabled = false;
   }
 
-
-
-  public void setSetpoint(ShoulderSetpoint setpoint) {
-    this.setpoint = setpoint;
+  public void setAutoSetpoint(ShoulderSetpoint autoSetpoint) {
+    this.autoSetpoint = autoSetpoint;
   }
 
-  public void armEnabled(boolean enabled) {
-      this.enabled = enabled;
+  public void enableAuto(boolean enabled) {
+      this.autoEnabled = enabled;
   }
 
   public double getEncoderAngle() {
     return encoder.getDistance() + ShoulderConstants.ENCODER_OFFSET;
   }
+
+  public double createManualSetpoint(double yAxis, double scalingFactor) {
+    if ((currentAngle + (yAxis * scalingFactor) < ShoulderConstants.LOWER_CONSTRAINT) || (currentAngle + (yAxis * scalingFactor) > ShoulderConstants.UPPER_CONSTRAINT)) {
+      return currentAngle;
+    }
+    return (currentAngle + (yAxis * scalingFactor));
+  }
   
 
   @Override
   public void periodic() {
+    currentAngle = getEncoderAngle();
 
-    if (enabled) {
-      shoulderMotors.set(pid.calculate(getEncoderAngle(), setpoint.getSetpointAngle()));
-    } else {
-      shoulderMotors.set(0.0);
+    if (arcadeControls.isYAxisActive()) {
+      shoulderMotors.set(pid.calculate(currentAngle, createManualSetpoint(arcadeControls.getY(), 25)));
+    } else if (autoEnabled) {
+      shoulderMotors.set(pid.calculate(currentAngle, autoSetpoint.getSetpointAngle()));
     }
-
 
   }
 }

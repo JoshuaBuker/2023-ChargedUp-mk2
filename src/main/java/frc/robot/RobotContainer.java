@@ -7,6 +7,7 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import Common.ArcadeControls;
 import Common.ThrustMaster;
 import Common.Utilities;
 import edu.wpi.first.math.controller.PIDController;
@@ -20,26 +21,24 @@ import frc.robot.subsystems.ArmExtentionSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.ShoulderSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 
 public class RobotContainer {
 
-  HashMap <String, Command> eventMap = new HashMap<String, Command>();
+  private static HashMap <String, Command> eventMap = new HashMap<String, Command>();
 
 //==============================================================================
 //======================== Create Subsystem Instance ===========================
-  private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
-  private final Superstructure superstructure = new Superstructure();
-  private final VisionSubsystem vision = new VisionSubsystem();
-  private final ShoulderSubsystem shoulder = new ShoulderSubsystem();
-  private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
-  private final ArmExtentionSubsystem armExtention = new ArmExtentionSubsystem();
+  private static final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
+  private static final Superstructure superstructure = new Superstructure();
+  private static final ShoulderSubsystem shoulder = new ShoulderSubsystem();
+  private static final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
+  private static final ArmExtentionSubsystem armExtention = new ArmExtentionSubsystem();
 
 
-  private final ThrustMaster driveJoy = new ThrustMaster(ControllerConstants.DRIVE_CONTROLLER_ID);
+  private static final ThrustMaster driveJoy = new ThrustMaster(ControllerConstants.DRIVE_CONTROLLER_ID);
+  private static final ArcadeControls arcadeControls = new ArcadeControls(ControllerConstants.ARCADE_CONTROLLER_ID);
 
   public RobotContainer() {
-      vision.register();
       shoulder.register();
       drivetrain.register();
       endEffector.register();
@@ -54,30 +53,34 @@ public class RobotContainer {
 
 //==============================================================================
 //=============================== Getter Methods ===============================
-  public DrivetrainSubsystem getDrivetrain() {
+  public static DrivetrainSubsystem getDrivetrain() {
     return drivetrain;
   }
 
-  public ThrustMaster getDriveJoystick() {
+  public static ThrustMaster getDriveJoystick() {
     return driveJoy;
   }
 
-  public Superstructure getSuperstructure() {
+  public static Superstructure getSuperstructure() {
     return superstructure;
   }
   
-  public ShoulderSubsystem getShoulder() {
+  public static ShoulderSubsystem getShoulder() {
     return shoulder;
   }
 
 
-  public EndEffectorSubsystem getEndEffector() {
+  public static EndEffectorSubsystem getEndEffector() {
     return endEffector;
   }
 
 
-  public ArmExtentionSubsystem getArmExtention() {
+  public static ArmExtentionSubsystem getArmExtention() {
     return armExtention;
+  }
+
+  public static ArcadeControls getArcadeControls() {
+    return arcadeControls;
   }
 
 
@@ -120,8 +123,7 @@ public class RobotContainer {
   private double getThrottleInput() {
     return Utilities.map(driveJoy.getThrottle(), 1, -1, 0, 1);
   }
-
-
+  
 //============================================================================
 //============================== Path Planner ================================
   
