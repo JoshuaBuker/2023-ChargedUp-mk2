@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,10 +21,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    @SuppressWarnings("unused")
     RobotContainer m_robotContainer = new RobotContainer();
 
     sendablechooser.setDefaultOption("Do nothing", null);
+    sendablechooser.addOption("Path Auto", m_robotContainer.autoBuilder.fullAuto(PathPlanner.loadPathGroup("TestPath", 2, 1)));
     SmartDashboard.putData("Autonomous", sendablechooser);
   }
 

@@ -1,25 +1,53 @@
 package frc.robot;
 
+import java.util.HashMap;
+
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
 import Common.ThrustMaster;
 import Common.Utilities;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Drive.DefaultDriveCommand;
+import frc.robot.subsystems.ArmExtentionSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.ShoulderSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class RobotContainer {
+
+  HashMap <String, Command> eventMap = new HashMap<String, Command>();
 
 //==============================================================================
 //======================== Create Subsystem Instance ===========================
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
+  private final Superstructure superstructure = new Superstructure();
+  private final VisionSubsystem vision = new VisionSubsystem();
+  private final ShoulderSubsystem shoulder = new ShoulderSubsystem();
+  private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
+  private final ArmExtentionSubsystem armExtention = new ArmExtentionSubsystem();
+
 
   private final ThrustMaster driveJoy = new ThrustMaster(Constants.DRIVE_CONTROLLER_ID);
 
   public RobotContainer() {
+      vision.register();
+      shoulder.register();
       drivetrain.register();
+      endEffector.register();
+      armExtention.register();
 
       drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, this::getForwardInput, this::getStrafeInput, this::getRotationInput, this::getThrottleInput));
 
       configureBindings();
+      configureEventMap();
   }
 
 
@@ -33,14 +61,32 @@ public class RobotContainer {
     return driveJoy;
   }
 
+  public Superstructure getSuperstructure() {
+    return superstructure;
+  }
+  
+  public ShoulderSubsystem getShoulder() {
+    return shoulder;
+  }
+
+
+  public EndEffectorSubsystem getEndEffector() {
+    return endEffector;
+  }
+
+
+  public ArmExtentionSubsystem getArmExtention() {
+    return armExtention;
+  }
+
 
 //==============================================================================
 //=========================== Configure Bindings ===============================
   private void configureBindings() {
-    
     driveJoy.getMiddle().onTrue(new RunCommand(drivetrain::zeroGyroscope));
   }
 
+  private void configureEventMap() {}
 
 //==============================================================================
 //=========================== Modify Joystick Input ============================
@@ -73,4 +119,39 @@ public class RobotContainer {
   private double getThrottleInput() {
     return Utilities.map(driveJoy.getThrottle(), 1, -1, 0, 1);
   }
+
+
+//============================================================================
+//============================== Path Planner ================================
+  
+public SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+  drivetrain::getPose,
+  drivetrain::resetOdometry,
+  new PIDConstants(1.5, 0.0, 0.0),
+  new PIDConstants(0.5, 0.0, 0.0),
+  drivetrain::drive,
+  eventMap,
+  drivetrain
+);
+
+public Command followTrajectory(PathPlannerTrajectory traj, boolean isFirstPath) {
+  return new SequentialCommandGroup(
+  new InstantCommand(() -> {
+  if(isFirstPath){
+    drivetrain.resetOdometry(traj.getInitialHolonomicPose());
+  }
+  }),
+  new PPSwerveControllerCommand(
+  traj,
+  drivetrain::getPose,
+  new PIDController(1.5, 0.0, 0.0),
+  new PIDController(1.5, 0.0, 0.0),
+  new PIDController(0.5, 0.0, 0.0),
+  drivetrain::drive,
+  drivetrain
+  )
+  );
+}
+
+
 }
