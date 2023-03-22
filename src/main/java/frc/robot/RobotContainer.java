@@ -16,7 +16,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.commands.Drive.DefaultDriveCommand;
+import frc.robot.commands.Defaults.DefaultDriveCommand;
+import frc.robot.commands.Defaults.DefaultShoulderCommand;
 import frc.robot.subsystems.ArmExtentionSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -44,6 +45,7 @@ public class RobotContainer {
       endEffector.register();
       armExtention.register();
 
+      shoulder.setDefaultCommand(new DefaultShoulderCommand(shoulder, 10, this::getArcadeY));
       drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, this::getForwardInput, this::getStrafeInput, this::getRotationInput, this::getThrottleInput));
 
       configureBindings();
@@ -122,6 +124,10 @@ public class RobotContainer {
   
   private double getThrottleInput() {
     return Utilities.map(driveJoy.getThrottle(), 1, -1, 0, 1);
+  }
+
+  private double getArcadeY() {
+    return arcadeControls.getY();
   }
   
 //============================================================================

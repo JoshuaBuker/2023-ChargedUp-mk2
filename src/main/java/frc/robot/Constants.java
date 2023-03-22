@@ -55,11 +55,12 @@ public class Constants {
         public static final int SHOULDER_MOTOR_LEFT = 29;
         public static final int SHOULDER_MOTOR_RIGHT = 23;
         public static final int SHOULDER_ENCODER = 0;
-        public static final int LOWER_CONSTRAINT = 30;
-        public static final int UPPER_CONSTRAINT = 275;
-
-        public static final double ANGLE_TOLERANCE = 1.0;
         public static final double ENCODER_OFFSET = -48.4;
+   }
+
+   public static final class ArmExtentionConstants {
+        public static final int[] LOWER_CYLINDER = new int[] {1, 14};
+        public static final int[] UPPER_CYLINDER = new int[] {2, 13};
    }
     
 
