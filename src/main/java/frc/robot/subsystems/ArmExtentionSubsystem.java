@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+
 import Common.DoubleSolenoidGroup;
+import Common.SetpointConstructors.DoubleSolenoidGroupSetpoint;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,6 +19,8 @@ public class ArmExtentionSubsystem extends SubsystemBase {
   
   private DoubleSolenoidGroup armExtentionGroup = new DoubleSolenoidGroup(lowerCylinders, upperCylinders);
 
+  private ArrayList<DoubleSolenoidGroupSetpoint> setpoints = DoubleSolenoidGroupSetpoint.getSetpoints();
+
   
   public ArmExtentionSubsystem() {
     armExtentionGroup.disable();
@@ -25,8 +30,24 @@ public class ArmExtentionSubsystem extends SubsystemBase {
     return indexCounter;
   }
 
-  public void IndexCounter(int indexCounter) {
-    this.indexCounter = indexCounter;
+  public void setArmToSetpoint(DoubleSolenoidGroupSetpoint setpoint) {
+    armExtentionGroup.set(setpoint);
+  }
+
+  public void next() {
+    if (indexCounter < setpoints.size()) {
+      indexCounter++;
+      armExtentionGroup.set(setpoints.get(indexCounter));
+    }
+  }
+
+  public void previous() {
+    if (indexCounter > 0) {
+      indexCounter--;
+      armExtentionGroup.set(setpoints.get(indexCounter));
+    } else {
+      armExtentionGroup.set(setpoints.get(0));
+    }
   }
 
 

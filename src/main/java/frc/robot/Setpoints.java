@@ -1,7 +1,5 @@
 package frc.robot;
 
-import java.util.ArrayList;
-
 import Common.ConstraintConstructors.PitchConstraint;
 import Common.SetpointConstructors.DoubleSolenoidGroupSetpoint;
 import Common.SetpointConstructors.PitchSetpoint;
@@ -15,9 +13,6 @@ public class Setpoints {
     public static DoubleSolenoidGroupSetpoint lowerExtended = new DoubleSolenoidGroupSetpoint(Value.kForward, Value.kReverse);
     public static DoubleSolenoidGroupSetpoint upperExtended = new DoubleSolenoidGroupSetpoint(Value.kReverse, Value.kForward);
     public static DoubleSolenoidGroupSetpoint fullyExtended = new DoubleSolenoidGroupSetpoint(Value.kForward, Value.kForward);
-
-    // Always keep this at the bottom
-    public static ArrayList<DoubleSolenoidGroupSetpoint> solenoidSetpoints = DoubleSolenoidGroupSetpoint.getSetpoints();
   }
 
   @SuppressWarnings("unused")

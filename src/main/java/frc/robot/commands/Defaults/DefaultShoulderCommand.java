@@ -14,7 +14,7 @@ public class DefaultShoulderCommand extends CommandBase {
   private double currentAngle;
   private double yAxis;
 
-  private PIDController pid = new PIDController(0.02, 0.0, 0.0);
+  private PIDController pid = new PIDController(0.03, 0.0, 0.0);
 
   
   public DefaultShoulderCommand(ShoulderSubsystem shoulder, double scalingFactor, DoubleSupplier yAxisSupplier) {
@@ -43,10 +43,5 @@ public class DefaultShoulderCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     shoulder.runShoulderMotors(0.0);
-  }
-
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

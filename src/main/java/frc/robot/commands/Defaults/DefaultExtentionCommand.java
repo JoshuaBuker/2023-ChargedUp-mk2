@@ -6,37 +6,38 @@ package frc.robot.commands.Defaults;
 
 import java.util.function.DoubleSupplier;
 
-import Common.SetpointConstructors.DoubleSolenoidGroupSetpoint;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmExtentionSubsystem;
 
 public class DefaultExtentionCommand extends CommandBase {
 
   ArmExtentionSubsystem arm;
-  DoubleSolenoidGroupSetpoint setpoint;
   DoubleSupplier xAxisSupplier;
   double xAxis;
 
 
-  public DefaultExtentionCommand(ArmExtentionSubsystem arm, DoubleSolenoidGroupSetpoint setpoint, DoubleSupplier xAxisSupplier) {
+  public DefaultExtentionCommand(ArmExtentionSubsystem arm, DoubleSupplier xAxisSupplier) {
     this.arm = arm;
-    this.setpoint = setpoint;
     this.xAxisSupplier = xAxisSupplier;
 
     addRequirements(arm);
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    xAxis = xAxisSupplier.getAsDouble();
+
+    if (xAxis > 0.5) {
+      arm.next();
+    } else if (xAxis < -0.5) {
+      arm.previous();
+    }
+
+  }
 
   @Override
   public void execute() {}
 
   @Override
   public void end(boolean interrupted) {}
-
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
 }
