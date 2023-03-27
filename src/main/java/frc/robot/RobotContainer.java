@@ -113,19 +113,19 @@ public class RobotContainer {
 //============================================================================
 //============================ Get Joystick Input ============================
   private double getForwardInput() {
-    return -square(deadband(driveJoy.getY(), 0.1)) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+    return -square(deadband(driveJoy.getY(), 0.1)) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND * getThrottleInput();
   }
 
   private double getStrafeInput() {
-    return -square(deadband(driveJoy.getX(), 0.1)) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND;
+    return -square(deadband(driveJoy.getX(), 0.1)) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND * getThrottleInput();
   }
     
   private double getRotationInput() {
-    return -square(deadband(driveJoy.getZ(), 0.1)) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+    return (-square(deadband(driveJoy.getZ(), 0.1)) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * getThrottleInput()) * 0.5;
   }
   
   private double getThrottleInput() {
-    return Utilities.map(driveJoy.getThrottle(), 1, -1, 0, 1);
+    return driveJoy.getThrottle();
   }
 
   private double getArcadeY() {
@@ -142,8 +142,8 @@ public class RobotContainer {
 public SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
   drivetrain::getPose,
   drivetrain::resetOdometry,
-  new PIDConstants(1.5, 0.0, 0.0),
-  new PIDConstants(0.5, 0.0, 0.0),
+  new PIDConstants(0.75, 0.0, 0.0),
+  new PIDConstants(0.25, 0.0, 0.0),
   drivetrain::drive,
   eventMap,
   drivetrain

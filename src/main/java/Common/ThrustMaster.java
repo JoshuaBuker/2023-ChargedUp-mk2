@@ -132,7 +132,7 @@ public class ThrustMaster  {
         return joy.getRawAxis(zAxis);
     }
     public double getThrottle() {
-        return joy.getRawAxis(throttleAxis);
+        return Utilities.map(joy.getRawAxis(throttleAxis), 1, -1, 0, 1);
     }
     public double getHatX() {
         return joy.getRawAxis(hatXAxis);
